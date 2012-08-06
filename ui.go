@@ -128,10 +128,11 @@ func (i *ToggleItem) HTML() (h.HTML, error) {
 }
 
 type TextInput struct {
-	Type  string
-	Label h.HTML
-	Name  string
-	Value interface{}
+	Type       string
+	Label      h.HTML
+	Name       string
+	Value      interface{}
+	InputClass string
 }
 
 func (i *TextInput) HTML() (h.HTML, error) {
@@ -152,6 +153,7 @@ func (i *TextInput) HTML() (h.HTML, error) {
 				Class: "controls",
 				Inner: &h.Frag{
 					&h.Input{
+						Class: i.InputClass,
 						Type:  t,
 						ID:    id,
 						Name:  i.Name,
