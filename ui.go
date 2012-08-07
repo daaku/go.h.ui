@@ -97,10 +97,11 @@ type ToggleItem struct {
 	Name        string
 	Checked     bool
 	Description h.HTML
+	Tooltip     string
 }
 
 func (i *ToggleItem) HTML() (h.HTML, error) {
-	return &h.Tr{
+	tr := &h.Tr{
 		Inner: &h.Frag{
 			&h.Td{
 				Inner: &h.Input{
@@ -124,7 +125,15 @@ func (i *ToggleItem) HTML() (h.HTML, error) {
 				Inner: i.Description,
 			},
 		},
-	}, nil
+	}
+	if i.Tooltip != "" {
+		tr.Class = tr.Class + " has-tooltip"
+		tr.Data = map[string]interface{}{
+			"title":     i.Tooltip,
+			"placement": "bottom",
+		}
+	}
+	return tr, nil
 }
 
 type TextInput struct {
