@@ -133,6 +133,8 @@ type TextInput struct {
 	Name       string
 	Value      interface{}
 	InputClass string
+	Help       h.HTML
+	Tooltip    string
 }
 
 func (i *TextInput) HTML() (h.HTML, error) {
@@ -141,7 +143,14 @@ func (i *TextInput) HTML() (h.HTML, error) {
 		t = "text"
 	}
 	id := MakeID(i.Name)
-	return &h.Div{
+	var help h.HTML
+	if i.Help != nil {
+		help = &h.P{
+			Class: "help-block",
+			Inner: i.Help,
+		}
+	}
+	div := &h.Div{
 		Class: "control-group",
 		Inner: &h.Frag{
 			&h.Label{
@@ -159,8 +168,17 @@ func (i *TextInput) HTML() (h.HTML, error) {
 						Name:  i.Name,
 						Value: fmt.Sprint(i.Value),
 					},
+					help,
 				},
 			},
 		},
-	}, nil
+	}
+	if i.Tooltip != "" {
+		div.Class = div.Class + " has-tooltip"
+		div.Data = map[string]interface{}{
+			"title":     i.Tooltip,
+			"placement": "bottom",
+		}
+	}
+	return div, nil
 }
